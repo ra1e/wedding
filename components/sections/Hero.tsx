@@ -4,7 +4,7 @@ import { motion, useAnimation } from 'framer-motion'
 import { useEffect, useState } from 'react'
 import { ChevronDown } from 'lucide-react'
 import type { GuestInfo } from '@/lib/guests'
-import { guestDisplayName, guestIsPlural, guestSalutation, guestBodyText } from '@/lib/guests'
+import { guestDisplayNameLines, guestIsPlural, guestSalutation, guestBodyText } from '@/lib/guests'
 
 interface HeroProps {
   guests: GuestInfo
@@ -48,7 +48,7 @@ export default function Hero({ guests }: HeroProps) {
   const plural     = guestIsPlural(guests)
   const salutation = guestSalutation(guests)
   const bodyText   = guestBodyText(guests)
-  const displayName = guestDisplayName(guests)
+  const displayNameLines = guestDisplayNameLines(guests)
 
   useEffect(() => {
     async function sequence() {
@@ -170,7 +170,9 @@ export default function Hero({ guests }: HeroProps) {
                   {salutation}
                 </p>
                 <p className="font-script text-4xl sm:text-5xl text-navy mb-6 leading-tight">
-                  {displayName}
+                  {displayNameLines.map((line, i) => (
+                    <span key={i} className="block">{line}</span>
+                  ))}
                 </p>
 
                 <div className="h-px bg-gradient-to-r from-transparent via-champagne to-transparent mb-6" />

@@ -24,6 +24,12 @@ export function guestDisplayName(info: GuestInfo): string {
   return info.names.join(' и ')
 }
 
+export function guestDisplayNameLines(info: GuestInfo): string[] {
+  if (info.isDefault || !info.names.length) return ['Дорогой гость']
+  if (info.names.length === 1) return [info.names[0]]
+  return info.names.flatMap((name, i) => i < info.names.length - 1 ? [name, 'и'] : [name])
+}
+
 export function guestIsPlural(info: GuestInfo): boolean {
   return info.names.length > 1
 }
