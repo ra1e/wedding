@@ -107,7 +107,7 @@ export default function RSVPForm({ guests }: RSVPFormProps) {
                 <p className="font-sans text-2xl text-navy mb-2">Спасибо!</p>
                 <p className="font-sans text-sm text-navy/60 leading-relaxed">
                   {attending === 'yes'
-                    ? `${plural ? 'Очень рады, что вы придёте' : 'Очень рады, что ты придёшь'} — до встречи 14 июня! 🎉`
+                    ? `${plural ? 'Очень рады, что вы придёте' : 'Очень рады, что ты придёшь'} — до встречи 9 сентября! 🎉`
                     : 'Мы понимаем и ценим твой ответ. Будем скучать!'}
                 </p>
               </div>
