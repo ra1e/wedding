@@ -26,7 +26,6 @@ export default function RSVPForm({ guests }: RSVPFormProps) {
   const [freeInput, setFreeInput] = useState('')
   const [checkedNames, setCheckedNames] = useState<string[]>(guestNames)
   const [guestCount, setGuestCount] = useState(1)
-  const [dietary, setDietary] = useState('')
   const [loading, setLoading] = useState(false)
   const [submitted, setSubmitted] = useState(false)
   const [error, setError] = useState('')
@@ -47,22 +46,27 @@ export default function RSVPForm({ guests }: RSVPFormProps) {
     setError('')
     setLoading(true)
     try {
-      const name = isGeneric
-        ? freeInput.trim()
-        : isSingle
-          ? guestNames[0]
-          : checkedNames.join(', ')
-      const guestsCount = isGeneric ? guestCount : isSingle ? 1 : checkedNames.length
+      let payload: object
+
+      if (isMultiple) {
+        payload = {
+          guests: guestNames.map((name) => ({
+            name,
+            attending: attending === 'yes' ? checkedNames.includes(name) : false,
+          })),
+        }
+      } else {
+        payload = {
+          name: isGeneric ? freeInput.trim() : guestNames[0],
+          attending: attending === 'yes',
+          guests: isGeneric ? guestCount : 1,
+        }
+      }
 
       const res = await fetch('/api/rsvp', {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify({
-          name,
-          attending: attending === 'yes',
-          guests: guestsCount,
-          dietary,
-        }),
+        body: JSON.stringify(payload),
       })
       if (!res.ok) throw new Error()
       setSubmitted(true)
@@ -76,7 +80,6 @@ export default function RSVPForm({ guests }: RSVPFormProps) {
   return (
     <section ref={ref} className="bg-champagne py-20 px-4">
       <div className="max-w-lg mx-auto">
-        {/* Header */}
         <motion.div
           initial={{ opacity: 0, y: 30 }}
           animate={inView ? { opacity: 1, y: 0 } : {}}
@@ -104,14 +107,13 @@ export default function RSVPForm({ guests }: RSVPFormProps) {
                 <p className="font-sans text-2xl text-navy mb-2">Спасибо!</p>
                 <p className="font-sans text-sm text-navy/60 leading-relaxed">
                   {attending === 'yes'
-                    ? `${plural ? 'Очень рады, что вы придёте' : 'Очень рады, что ты придёшь'} — до встречи 9 сентября! 🎉`
+                    ? `${plural ? 'Очень рады, что вы придёте' : 'Очень рады, что ты придёшь'} — до встречи 14 июня! 🎉`
                     : 'Мы понимаем и ценим твой ответ. Будем скучать!'}
                 </p>
               </div>
             </div>
           ) : (
             <form onSubmit={handleSubmit} className="flex flex-col gap-6">
-              {/* Attend toggle */}
               <div>
                 <p className="font-sans text-base text-navy/60 mb-3 text-center">
                   {plural ? 'Вы придёте на нашу свадьбу?' : 'Ты придёшь на нашу свадьбу?'}
@@ -142,7 +144,6 @@ export default function RSVPForm({ guests }: RSVPFormProps) {
                 </div>
               </div>
 
-              {/* Multiple named guests — checkboxes */}
               {isMultiple && attending === 'yes' && (
                 <div>
                   <label className="font-sans text-sm text-navy/50 block mb-3 tracking-wide">
@@ -170,7 +171,6 @@ export default function RSVPForm({ guests }: RSVPFormProps) {
                 </div>
               )}
 
-              {/* Generic — free text name + count */}
               {isGeneric && (
                 <div>
                   <label className="font-sans text-sm text-navy/50 block mb-1.5 tracking-wide">
@@ -186,7 +186,6 @@ export default function RSVPForm({ guests }: RSVPFormProps) {
                 </div>
               )}
 
-              {/* Generic — guest count */}
               {isGeneric && attending === 'yes' && (
                 <div>
                   <label className="font-sans text-sm text-navy/50 block mb-1.5 tracking-wide">

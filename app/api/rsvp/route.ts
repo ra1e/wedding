@@ -1,38 +1,40 @@
 import { NextRequest, NextResponse } from 'next/server'
-import path from 'path'
-import fs from 'fs/promises'
 
-function getDataPath() {
-  if (process.env.NODE_ENV === 'production') return '/tmp'
-  return path.join(process.cwd(), 'data')
+async function sendTelegram(name: string, attending: boolean, guests?: number) {
+  const token = process.env.TELEGRAM_BOT_TOKEN
+  const chatIds = process.env.TELEGRAM_CHAT_IDS
+  if (!token || !chatIds) return
+
+  const status = attending ? '✅ Придёт' : '❌ Не придёт'
+  const lines = [`🎊 *Новый RSVP!*`, `👤 ${name}`, status]
+  if (attending && guests && guests > 1) lines.push(`👥 Гостей: ${guests}`)
+
+  const text = lines.join('\n')
+  const ids = chatIds.split(',').map((s) => s.trim()).filter(Boolean)
+
+  await Promise.all(
+    ids.map((chatId) =>
+      fetch(`https://api.telegram.org/bot${token}/sendMessage`, {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({ chat_id: chatId, text, parse_mode: 'Markdown' }),
+      })
+    )
+  )
 }
 
 export async function POST(request: NextRequest) {
   const body = await request.json()
 
-  const dataPath = getDataPath()
-  const filePath = path.join(dataPath, 'rsvp.json')
-
-  let list: unknown[] = []
-  try {
-    const raw = await fs.readFile(filePath, 'utf-8')
-    list = JSON.parse(raw)
-  } catch {}
-
-  list.push({ ...body, timestamp: new Date().toISOString() })
-
-  await fs.mkdir(dataPath, { recursive: true })
-  await fs.writeFile(filePath, JSON.stringify(list, null, 2), 'utf-8')
+  if (Array.isArray(body.guests)) {
+    await Promise.all(
+      body.guests.map((g: { name: string; attending: boolean }) =>
+        sendTelegram(g.name, g.attending)
+      )
+    )
+  } else {
+    await sendTelegram(body.name, body.attending, body.guests)
+  }
 
   return NextResponse.json({ success: true })
-}
-
-export async function GET() {
-  const filePath = path.join(getDataPath(), 'rsvp.json')
-  try {
-    const raw = await fs.readFile(filePath, 'utf-8')
-    return NextResponse.json(JSON.parse(raw))
-  } catch {
-    return NextResponse.json([])
-  }
 }
