@@ -9,8 +9,9 @@ export function parseSearchParams(
   sp: Record<string, string | string[] | undefined>
 ): GuestInfo {
   const raw = sp['guests[]'] ?? sp['guests']
+  const decode = (s: string) => { try { return decodeURIComponent(s) } catch { return s } }
   const names: string[] = raw
-    ? (Array.isArray(raw) ? raw : [raw]).map(s => s.trim()).filter(Boolean)
+    ? (Array.isArray(raw) ? raw : [raw]).map(s => decode(s).trim()).filter(Boolean)
     : []
   const g = Array.isArray(sp['gender']) ? sp['gender'][0] : sp['gender']
   const gender: GuestInfo['gender'] =
