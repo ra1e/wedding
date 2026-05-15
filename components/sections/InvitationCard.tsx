@@ -3,7 +3,7 @@
 import { useRef } from 'react'
 import { motion, useInView } from 'framer-motion'
 import type { GuestInfo } from '@/lib/guests'
-import { guestDisplayNameLines, guestSalutation, guestBodyText } from '@/lib/guests'
+import { guestDisplayName, guestSalutation, guestBodyText } from '@/lib/guests'
 
 interface InvitationCardProps {
   guests: GuestInfo
@@ -15,7 +15,7 @@ export default function InvitationCard({ guests }: InvitationCardProps) {
 
   const salutation = guestSalutation(guests)
   const bodyText   = guestBodyText(guests)
-  const displayNameLines = guestDisplayNameLines(guests)
+  const displayName = guestDisplayName(guests)
 
   return (
     <section className="bg-champagne py-20 px-4">
@@ -75,9 +75,14 @@ export default function InvitationCard({ guests }: InvitationCardProps) {
             {salutation}
           </p>
           <p className="font-script text-4xl sm:text-5xl text-navy mb-6 leading-tight">
-            {displayNameLines.map((line, i) => (
-              <span key={i} className="block">{line}</span>
-            ))}
+            {guests.names.length > 1
+              ? guests.names.map((name, i) => (
+                  <span key={i} className="block">
+                    {i > 0 && <span className="block text-2xl sm:text-3xl">и</span>}
+                    {name}
+                  </span>
+                ))
+              : displayName}
           </p>
 
           <div className="h-px bg-gradient-to-r from-transparent via-champagne to-transparent mb-6" />
