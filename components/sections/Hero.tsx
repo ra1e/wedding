@@ -173,7 +173,7 @@ export default function Hero({ guests }: HeroProps) {
                   {guests.names.length > 1
                     ? guests.names.map((name, i) => (
                         <span key={i} className="block">
-                          {i > 0 && <span className="block text-2xl sm:text-3xl">и</span>}
+                          {i > 0 && <span className="text-2xl sm:text-3xl">и </span>}
                           {name}
                         </span>
                       ))
