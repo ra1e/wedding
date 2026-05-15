@@ -1,0 +1,83 @@
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+:root {
+  --ivory: #FDFcf8;
+  --champagne: #efeae0;
+  --powder-pink: #ffd8e1;
+  --powder-blue: #b9d8f3;
+  --teal: #80d7e0;
+  --navy: #1b2a4a;
+}
+
+html {
+  scroll-behavior: smooth;
+}
+
+body {
+  background-color: var(--ivory);
+  color: var(--navy);
+}
+
+/* Ornamental divider */
+.ornament-divider {
+  display: flex;
+  align-items: center;
+  gap: 1rem;
+}
+.ornament-divider::before,
+.ornament-divider::after {
+  content: '';
+  flex: 1;
+  height: 1px;
+  background: linear-gradient(to right, transparent, #efeae0, transparent);
+}
+
+/* Invitation card border effect */
+.invitation-border {
+  position: relative;
+  box-shadow: 0 0 0 1px #efeae0, 0 0 0 8px #FDFcf8, 0 0 0 10px #efeae0;
+}
+
+/* Scrollbar */
+::-webkit-scrollbar {
+  width: 6px;
+}
+::-webkit-scrollbar-track {
+  background: var(--ivory);
+}
+::-webkit-scrollbar-thumb {
+  background: var(--champagne);
+  border-radius: 3px;
+}
+::-webkit-scrollbar-thumb:hover {
+  background: var(--powder-blue);
+}
+
+/* Selection color */
+::selection {
+  background: var(--powder-pink);
+  color: var(--navy);
+}
+
+@layer utilities {
+  .text-balance {
+    text-wrap: balance;
+  }
+}
+
+@keyframes wingFlapUp {
+  0%, 100% { opacity: 1; }
+  50% { opacity: 0; }
+}
+@keyframes wingFlapDown {
+  0%, 100% { opacity: 0; }
+  50% { opacity: 1; }
+}
+.dove-wing-up {
+  animation: wingFlapUp 0.45s ease-in-out infinite;
+}
+.dove-wing-down {
+  animation: wingFlapDown 0.45s ease-in-out infinite;
+}
