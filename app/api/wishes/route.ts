@@ -9,7 +9,6 @@ function getDataPath() {
 
 export async function POST(request: NextRequest) {
   const body = await request.json()
-
   const dataPath = getDataPath()
   const filePath = path.join(dataPath, 'wishes.json')
 
