@@ -64,27 +64,6 @@ export default function WeddingColors() {
           ))}
         </motion.div>
 
-        {/* Notes */}
-        <motion.div
-          initial={{ opacity: 0, y: 20 }}
-          animate={inView ? { opacity: 1, y: 0 } : {}}
-          transition={{ duration: 0.7, delay: 0.5 }}
-          className="flex flex-col sm:flex-row gap-4 mt-4"
-        >
-          <div className="flex-1 bg-white rounded-2xl p-5 shadow-card border border-champagne/60 flex items-start gap-3">
-            <span className="text-2xl flex-shrink-0">🩱</span>
-            <p className="font-sans text-sm text-navy/65 leading-relaxed">
-              Возьмите купальник — на вилле будет бассейн
-            </p>
-          </div>
-          <div className="flex-1 bg-white rounded-2xl p-5 shadow-card border border-champagne/60 flex items-start gap-3">
-            <span className="text-2xl flex-shrink-0">🌙</span>
-            <p className="font-sans text-sm text-navy/65 leading-relaxed">
-              При желании можно остаться на ночь на вилле
-            </p>
-          </div>
-        </motion.div>
-
       </div>
     </section>
   )

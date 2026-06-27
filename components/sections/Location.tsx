@@ -83,8 +83,8 @@ export default function Location() {
               </div>
               <div>
                 <p className="font-sans text-xs tracking-[0.2em] uppercase text-navy/40 mb-0.5">Место свадьбы</p>
-                <p className="font-sans text-lg font-semibold text-navy mb-0.5">Загородная вилла</p>
-                <p className="font-sans text-sm text-navy/55">Чакви, Аджария · трансфер в 15:00</p>
+                <p className="font-sans text-lg font-semibold text-navy mb-0.5">Litz Resort</p>
+                <p className="font-sans text-sm text-navy/55">Квариати, Аджария · трансфер в 15:00</p>
               </div>
             </div>
 
